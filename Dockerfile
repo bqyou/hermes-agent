@@ -1,7 +1,13 @@
 FROM nousresearch/hermes-agent:latest
 
-# Optional: expose a port if you want the dashboard later (not needed for Telegram)
-# EXPOSE 8080
+# Use the data directory for everything
+ENV HERMES_HOME=/data/.hermes \
+    HOME=/data \
+    HERMES_SKIP_PERMISSIONS_SETUP=true \
+    MESSAGING_CWD=/data/workspace
 
-# Hermes will use the mounted volume for persistence
+# Create the directories with proper permissions at build time
+RUN mkdir -p /data/.hermes /data/workspace && \
+    chmod -R 777 /data
+
 CMD ["hermes", "gateway", "start"]
