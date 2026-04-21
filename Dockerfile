@@ -1,19 +1,7 @@
-FROM python:3.12-slim
+FROM nousresearch/hermes-agent:latest
 
-# Install system dependencies (git is often needed for Hermes dependencies)
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+# Optional: expose a port if you want the dashboard later (not needed for Telegram)
+# EXPOSE 8080
 
-WORKDIR /app
-
-# Copy the entire project
-COPY . .
-
-# Install Hermes Agent (this runs the official install script)
-RUN curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
-
-# Railway start command - this launches the persistent gateway
+# Hermes will use the mounted volume for persistence
 CMD ["hermes", "gateway", "start"]
